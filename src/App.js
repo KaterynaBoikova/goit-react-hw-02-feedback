@@ -3,7 +3,7 @@ import Section from "./Components/Section/Section";
 import Statistics from "./Components/Statistics/Statistics";
 import FeedbackOptions from "./Components/FeedbackOptions/FeedbackOptions";
 import Notification from "./Components/Notification/Notification";
-const FeedOptions=['Good', 'Neutral', 'Bad'];
+const FEED_OPTIONS=['Good', 'Neutral', 'Bad'];
 
 class App extends Component{
     state = {
@@ -11,23 +11,20 @@ class App extends Component{
         neutral: 0,
         bad: 0
     }
-    hadleFeedback = (index) => {
-        this.setState(prevState => {
-            return{
-                good: index===0 ? prevState.good + 1: prevState.good,
-                neutral: index===1 ? prevState.neutral + 1: prevState.neutral,
-                bad: index===2 ? prevState.bad + 1: prevState.bad,
-            }
-        })
+
+    hadleFeedback = option => {
+        this.setState(prevState => ({
+            [option.toLowerCase()]: prevState[option.toLowerCase()] + 1,
+        }));
     };
-    countTotalFeedback=(a, b, c)=>{return a+b+c};
-    countPositiveFeedbackPercentage=(a,b,c)=>{return Math.round(a/(a+b+c)*100)};
+    countTotalFeedback=()=>{return this.state.good+this.state.neutral+this.state.bad};
+    countPositiveFeedbackPercentage=()=>{return Math.round(this.state.good/this.countTotalFeedback()*100)};
     render() {
         let checkIfAnyFeedback = this.state.good+this.state.bad+this.state.neutral > 0 ? false: true ;
         return(
          <div>
                 <Section title="Please leave feedback">
-                    <FeedbackOptions options={FeedOptions} onLeaveFeedback={this.hadleFeedback}/>
+                    <FeedbackOptions options={FEED_OPTIONS} onLeaveFeedback={this.hadleFeedback}/>
                 </Section>
 
                 <Section title="Statistics">
